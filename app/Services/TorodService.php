@@ -251,4 +251,49 @@ class TorodService
         $response =  Http::acceptJson()->withHeaders($headers)->get($url);
         return $response->json();
     }
+    public function trackOrder($request){
+        $headers = [
+            'Accept'=>'application/json',
+            'Authorization'=>request()->bearerToken(),
+            'Content-Type'=>'application/json'
+        ];
+        // Set Data Body
+        $body = array(
+            "tracking_id"=>$request->tracking_id
+        );
+
+        $client = new Client(['base_uri' => env('Torod_URL'),'headers' => $headers] );
+        try {
+            $response = $client->request('POST', '/en/api/order/track' ,
+                [      'form_params' =>  $body ] );
+        }catch (BadResponseException $e){
+            return  $e->getMessage();
+        }
+
+        $responseJSON = json_decode($response->getBody(), true);
+        return $responseJSON;
+    }
+
+    public function cancelOrder($request){
+        $headers = [
+            'Accept'=>'application/json',
+            'Authorization'=>request()->bearerToken(),
+            'Content-Type'=>'application/json'
+        ];
+        // Set Data Body
+        $body = array(
+            "tracking_id"=>$request->tracking_id
+        );
+
+        $client = new Client(['base_uri' => env('Torod_URL'),'headers' => $headers] );
+        try {
+            $response = $client->request('POST', '/en/api/order/track' ,
+                [      'form_params' =>  $body ] );
+        }catch (BadResponseException $e){
+            return  $e->getMessage();
+        }
+
+        $responseJSON = json_decode($response->getBody(), true);
+        return $responseJSON;
+    }
 }

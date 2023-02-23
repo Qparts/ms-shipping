@@ -17,4 +17,12 @@ class ShipmentController extends Controller
     public function shipmentList(){
         return $this->torodService->shipmentList();
     }
+    public function trackOrder(Request $request){
+        return $this->torodService->trackOrder($request);
+
+    }
+    public function cancelOrder(Request $request){
+        return $this->torodService->cancelOrder($request);
+
+    }
 }

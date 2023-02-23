@@ -50,6 +50,7 @@ Route::controller(CourierController::class)->group(function () {
 Route::controller(ShipmentController::class)->group(function () {
     Route::get('shipments/list', 'shipmentList')->name('shipment-list');
     Route::post('shipments/order/track', 'trackOrder')->name('order-track');
+    Route::post('shipments/order/cancel', 'cancelOrder')->name('order-cancel');
 });
 
 
