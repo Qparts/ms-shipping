@@ -337,4 +337,28 @@ class TorodService
         return $responseJSON['data'][0];
 
     }
+
+    public function getLatLongDetails($request){
+        $headers = [
+            'Accept'=>'application/json',
+            'Authorization'=>request()->bearerToken(),
+            'Content-Type'=>'application/json'
+        ];
+        // Set Data Body
+        $body = array(
+            "latitude"=>$request->latitude,
+            "longitude"=>$request->longitude
+        );
+
+        $client = new Client(['base_uri' => env('Torod_URL'),'headers' => $headers] );
+        try {
+            $response = $client->request('POST', '/en/api/get-latlong-details' ,
+                [      'form_params' =>  $body ] );
+        }catch (BadResponseException $e){
+            return  $e->getMessage();
+        }
+
+        $responseJSON = json_decode($response->getBody(), true);
+        return $responseJSON['data']['city_data'];
+    }
 }

@@ -43,5 +43,8 @@ class AddressController extends Controller
     public function updateAddress(Request $request,$address_id){
         return $this->torodService->updateAddress($request,$address_id);
     }
+    public function getLatLongDetails(Request $request){
+        return $this->torodService->getLatLongDetails($request);
+    }
 
 }

@@ -40,6 +40,7 @@ Route::controller(AddressController::class)->group(function () {
     Route::get('address/list', 'listAddress')->name('list');
     Route::post('get-address-details', 'details')->name('details');
     Route::post('address/update/{address_id}', 'updateAddress')->name('update-address');
+    Route::post('get-latlong-details', 'getLatLongDetails')->name('latlong-address');
 });
 
 Route::controller(CourierController::class)->group(function () {
