@@ -27,12 +27,12 @@ class AddressController extends Controller
     }
     public function createAddress(Request $request){
         $addresses = $request->addresses;
-      //  $addressesCreated = [];
+        $addressesCreated = [];
         foreach($addresses as $address){
             $addressCreated =    $this->torodService->createAddress($address);
-          //  array_push($addressCreated,$addressCreated);
+            array_push($addressesCreated,$addressCreated);
         }
-        return $addressCreated;
+        return $addressesCreated;
     }
     public function listAddress(){
         return $this->torodService->listAddress();

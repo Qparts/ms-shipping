@@ -2,6 +2,7 @@
 
 
 namespace App\Services;
+use App\Http\Resources\AddressResource;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use http\Client\Response;
@@ -97,7 +98,9 @@ class TorodService
             "email"=>$request['email'],
             "zip_code"=>$request['zip_code'],
             "type"=>$request['type'],
-            "locate_address"=>$request['locate_address']
+            "locate_address"=>$request['locate_address'] ?? NULL,
+            "latitude"=>$request['latitude'] ?? NULL,
+            "longitude"=>$request['longitude'] ?? NULL,
 
         );
 
@@ -110,7 +113,7 @@ class TorodService
         }
 
         $responseJSON = json_decode($response->getBody(), true);
-        return $responseJSON;
+        return  new AddressResource($responseJSON['data']);
     }
 
     public function listAddress(){
