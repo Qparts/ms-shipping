@@ -19,15 +19,15 @@ class OrderController extends Controller
     public function store(Request $request,$order_type){
 
         // Oneet rules
-        $OneetRules = [
-            'pickup_address_id' => 'required|integer',
-            'store_id' => 'required|integer',
-            'vehicle_type_id' => 'required|integer',
-            'name' => 'required',
-            'mobile_no' => 'required'
-        ];
+//        $OneetRules = [
+//            'pickup_address_id' => 'required|integer',
+//            'store_id' => 'required|integer',
+//            'vehicle_type_id' => 'required|integer',
+//            'name' => 'required',
+//            'mobile_no' => 'required'
+//        ];
 
-        $TorodRules = [
+        $rules = [
             "name"=>"required",
             "phone_number"=>"required",
             'email'=>'required|email',
@@ -41,26 +41,17 @@ class OrderController extends Controller
             'locate_address'=>'required'
         ];
 
+        $validator = \Validator::make($request->all(), $rules);
+        $token = $request->header('Authorization');
+        if($validator->fails())
+        {
+            $messages = $validator->getMessageBag();
+            return $this->error($messages,409);
+        }
+
         if($order_type == "Oneet"){
-            $validator = \Validator::make($request->all(), $OneetRules);
-            if($validator->fails())
-            {
-                $messages = $validator->getMessageBag();
-                return $this->error($messages,409);
-            }
-
             return $this->createOneetOrder($request);
-
         }else{
-
-            $token = $request->header('Authorization');
-            $validator = \Validator::make($request->all(),$TorodRules);
-            if($validator->fails())
-            {
-                $messages = $validator->getMessageBag();
-                return $this->error($messages,409);
-            }
-
             return $this->createTorodOrder($request,$token);
 
         }

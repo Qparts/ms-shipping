@@ -4,6 +4,7 @@
 namespace App\Services;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
+use http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
 class TorodService
@@ -82,7 +83,6 @@ class TorodService
     }
 
     public function createAddress($request){
-
         $headers = [
             'Accept'=>'application/json',
             'Authorization'=>request()->bearerToken(),
@@ -90,21 +90,21 @@ class TorodService
         ];
         // Set Data Body
         $body = array(
-            "warehouse_name"=>$request->warehouse_name,
-            "warehouse"=>$request->warehouse,
-            "contact_name"=>$request->contact_name,
-            "phone_number"=>$request->phone_number,
-            "email"=>$request->email,
-            "zip_code"=>$request->zip_code,
-            "type"=>$request->type,
-            "locate_address"=>$request->locate_address
+            "warehouse_name"=>$request['warehouse_name'],
+            "warehouse"=>$request['warehouse'],
+            "contact_name"=>$request['contact_name'],
+            "phone_number"=>$request['phone_number'],
+            "email"=>$request['email'],
+            "zip_code"=>$request['zip_code'],
+            "type"=>$request['type'],
+            "locate_address"=>$request['locate_address']
 
         );
 
         $client = new Client(['base_uri' => env('Torod_URL'),'headers' => $headers] );
         try {
             $response = $client->request('POST', '/en/api/create/address' ,
-                [      'form_params' =>  $body ] );
+                ['form_params' =>  $body ] );
         }catch (BadResponseException $e){
             return  $e->getMessage();
         }
@@ -200,11 +200,14 @@ class TorodService
         ];
         // Set Data Body
         $body = array(
-            "order_id"=>$request->order_id,
+            "warehouse_name"=>$request->warehouse_name,
             "warehouse"=>$request->warehouse,
+            "contact_name"=>$request->contact_name,
+            "phone_number"=>$request->phone_number,
+            "email"=>$request->email,
+            "zip_code"=>$request->zip_code,
             "type"=>$request->type,
-            "filter_by"=>$request->filter_by,
-            "is_insurance"=>$request->is_insurance
+            "locate_address"=>$request->locate_address
         );
         $client = new Client(['base_uri' => env('Torod_URL'),'headers' => $headers] );
         try {
@@ -215,6 +218,10 @@ class TorodService
         }
 
         $responseJSON = json_decode($response->getBody(), true);
+
+        if(!$responseJSON){
+            return response()->json(['message' => 'something went wrong!']);
+        }
         return $responseJSON;
     }
     public function orderShipProcess($request){
@@ -295,5 +302,39 @@ class TorodService
 
         $responseJSON = json_decode($response->getBody(), true);
         return $responseJSON;
+    }
+
+    public function CourierList($request){
+        $headers = [
+            'Accept'=>'application/json',
+            'Authorization'=>request()->bearerToken(),
+            'Content-Type'=>'application/json'
+        ];
+        // Set Data Body
+        $body = array(
+            "warehouse"=>$request->warehouse,
+            "customer_city_id"=>$request->customer_city_id,
+            "payment"=>$request->payment,
+            "weight"=>$request->weight,
+            "order_total"=>$request->order_total,
+            "no_of_box"=>$request->no_of_box,
+            "type"=>$request->type,
+            "filter_by"=>"fastest"
+            //is_insurance:1
+        );
+        $client = new Client(['base_uri' => env('Torod_URL'),'headers' => $headers] );
+        try {
+            $response = $client->request('POST', '/en/api/courier/partners/list',
+                [      'form_params' =>  $body ] );
+        }catch (BadResponseException $e){
+            return  $e->getMessage();
+        }
+
+        $responseJSON = json_decode($response->getBody(), true);
+        if(!$responseJSON['data'][0]){
+            return response()->json(['message' => 'something went wrong!']);
+        }
+        return $responseJSON['data'][0];
+
     }
 }

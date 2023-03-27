@@ -26,7 +26,13 @@ class AddressController extends Controller
         return $this->torodService->cities($region_id);
     }
     public function createAddress(Request $request){
-        return $this->torodService->createAddress($request);
+        $addresses = $request->addresses;
+      //  $addressesCreated = [];
+        foreach($addresses as $address){
+            $addressCreated =    $this->torodService->createAddress($address);
+          //  array_push($addressCreated,$addressCreated);
+        }
+        return $addressCreated;
     }
     public function listAddress(){
         return $this->torodService->listAddress();

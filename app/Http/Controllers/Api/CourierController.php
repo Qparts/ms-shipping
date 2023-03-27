@@ -21,4 +21,7 @@ class CourierController extends Controller
     public function orderCourierPartner(Request $request){
         return $this->torodService->orderCourierPartner($request);
     }
+    public function CourierList(Request $request){
+        return $this->torodService->CourierList($request);
+    }
 }

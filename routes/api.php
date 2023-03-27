@@ -45,6 +45,7 @@ Route::controller(AddressController::class)->group(function () {
 Route::controller(CourierController::class)->group(function () {
     Route::get('courier/partner/list', 'getCourierPartners')->name('courier-partners');
     Route::post('courier/partners', 'orderCourierPartner')->name('order-courier-partners');
+    Route::post('courier/partners/list','CourierList')->name('courier-partners');
 });
 
 Route::controller(ShipmentController::class)->group(function () {
