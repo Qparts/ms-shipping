@@ -29,7 +29,9 @@ class TorodService
             "no_of_box"=>$request->no_of_box,
             "type"=>$request->type,
             "locate_address"=>$request->locate_address,
-            "weight"=>$request->weight
+            "weight"=>$request->weight,
+            "latitude"=>$request->latitude,
+            "longitude"=>$request->longitude,
         );
 
         $client = new Client(['base_uri' => env('Torod_URL'),'headers' => $headers] );
