@@ -36,9 +36,7 @@ class OrderController extends Controller
             'payment'=>'required',
             'weight'=>'required',
             'no_of_box'=>'required',
-            'type'=>'required',
-            'district_id'=>'required',
-            'locate_address'=>'required'
+            'type'=>'required'
         ];
 
         $validator = \Validator::make($request->all(), $rules);
