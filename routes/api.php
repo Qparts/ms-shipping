@@ -27,12 +27,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::controller(OrderController::class)->group(function () {
     // Torod Endpoints
-    Route::post('order/torod', 'store')->name('store');
+    Route::post('order/torod', 'createTorodOrder')->name('store');
     Route::get('order/list', 'orderList')->name('list-order');
     Route::get('order/ship/process', 'orderShipProcess')->name('ship-process');
 
     //Oneet Endpoints
     Route::post('order/oneet', 'storeOneet')->name('store-oneet');
+    Route::get('order/oneet/{id}', 'trackOrderOneet')->name('track-order-oneet');
 
 
 });

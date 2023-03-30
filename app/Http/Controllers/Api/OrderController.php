@@ -18,36 +18,37 @@ class OrderController extends Controller
         $this->torodService = $torodService;
         $this->oneetService = $oneetService;
     }
-    public function store(Request $request,$order_type){
+//    public function store(Request $request,$order_type){
+//
+//        $rules = [
+//            "name"=>"required",
+//            "phone_number"=>"required",
+//            'email'=>'required|email',
+//            'item_description'=>'required',
+//            'order_total'=>'required',
+//            'payment'=>'required',
+//            'weight'=>'required',
+//            'no_of_box'=>'required',
+//            'type'=>'required'
+//        ];
+//
+//        $validator = \Validator::make($request->all(), $rules);
+//        $token = $request->header('Authorization');
+//        if($validator->fails())
+//        {
+//            $messages = $validator->getMessageBag();
+//            return $this->error($messages,409);
+//        }
+//
+//        if($order_type == "Oneet"){
+//            return $this->createOneetOrder($request);
+//        }else{
+//            return $this->createTorodOrder($request,$token);
+//
+//        }
+//    }
 
-        $rules = [
-            "name"=>"required",
-            "phone_number"=>"required",
-            'email'=>'required|email',
-            'item_description'=>'required',
-            'order_total'=>'required',
-            'payment'=>'required',
-            'weight'=>'required',
-            'no_of_box'=>'required',
-            'type'=>'required'
-        ];
-
-        $validator = \Validator::make($request->all(), $rules);
-        $token = $request->header('Authorization');
-        if($validator->fails())
-        {
-            $messages = $validator->getMessageBag();
-            return $this->error($messages,409);
-        }
-
-        if($order_type == "Oneet"){
-            return $this->createOneetOrder($request);
-        }else{
-            return $this->createTorodOrder($request,$token);
-
-        }
-    }
-
+    //Oneet
     public function storeOneet(Request $request){
         // Oneet rules
         $OneetRules = [
@@ -67,9 +68,13 @@ class OrderController extends Controller
         }
         return $this->oneetService->storeOrder($request,$token);
     }
+    public function trackOrderOneet(Request $request,$id){
+        $token = $request->header('Authorization');
+        return $this->oneetService->trackOrder($request,$token,$id);
+    }
 
-
-    function createTorodOrder($request){
+    //Torod
+     public function createTorodOrder($request){
         $request->header('Authorization');
         $torodService = new TorodService();
         $token = $request->header('Authorization');

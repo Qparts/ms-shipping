@@ -30,7 +30,16 @@ class OneetService
         return $response->json();
     }
 
-    public function trackOrder($request,$token){
+    public function trackOrder($request,$token,$id){
+        $response = Http::withHeaders([
+            'Content-Type'=>'application/json',
+            'Authorization'=> $token,
+            'X-Requested-With'=>'XMLHttpRequest'
+        ])->get(env('Oneet_URL').'/store/orders/'.$id, [
+            "store_id"=> $request->store_id,
+            "order_no"=> $request->order_no
+        ]);
 
+        return $response->json();
     }
 }
