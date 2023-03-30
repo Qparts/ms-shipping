@@ -69,10 +69,10 @@ class OrderController extends Controller
     }
 
 
-    function createTorodOrder($request,$token){
+    function createTorodOrder($request){
         $request->header('Authorization');
         $torodService = new TorodService();
-
+        $token = $request->header('Authorization');
         $res = $torodService->storeOrder($request,$token);
         return $this->success($res,"success");
     }
