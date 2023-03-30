@@ -12,20 +12,13 @@ class OrderController extends Controller
 {
     use ApiResponse;
     public $torodService;
-    public function __construct(TorodService $torodService)
+    public $oneetService;
+    public function __construct(TorodService $torodService,OneetService $oneetService)
     {
         $this->torodService = $torodService;
+        $this->oneetService = $oneetService;
     }
     public function store(Request $request,$order_type){
-
-        // Oneet rules
-//        $OneetRules = [
-//            'pickup_address_id' => 'required|integer',
-//            'store_id' => 'required|integer',
-//            'vehicle_type_id' => 'required|integer',
-//            'name' => 'required',
-//            'mobile_no' => 'required'
-//        ];
 
         $rules = [
             "name"=>"required",
@@ -55,12 +48,26 @@ class OrderController extends Controller
         }
     }
 
-    function createOneetOrder($request){
+    public function storeOneet(Request $request){
+        // Oneet rules
+        $OneetRules = [
+            'pickup_address_id' => 'required|integer',
+            'store_id' => 'required|integer',
+            'vehicle_type_id' => 'required|integer',
+            'name' => 'required',
+            'phone_number' => 'required'
+        ];
 
-        $oneetService = new OneetService();
-        $res = $oneetService->storeOrder($request);
-        return $this->success($res,"success");
+        $validator = \Validator::make($request->all(), $OneetRules);
+        $token = $request->header('Authorization');
+        if($validator->fails())
+        {
+            $messages = $validator->getMessageBag();
+            return $this->error($messages,409);
+        }
+        return $this->oneetService->storeOrder($request,$token);
     }
+
 
     function createTorodOrder($request,$token){
         $request->header('Authorization');

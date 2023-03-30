@@ -212,7 +212,9 @@ class TorodService
             "email"=>$request->email,
             "zip_code"=>$request->zip_code,
             "type"=>$request->type,
-            "locate_address"=>$request->locate_address
+            "locate_address"=>$request->locate_address,
+            "latitude"=>$request->latitude,
+            "longitude"=>$request->longitude
         );
         $client = new Client(['base_uri' => env('Torod_URL'),'headers' => $headers] );
         try {

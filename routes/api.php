@@ -22,14 +22,19 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-//Oneet Endpoints
-//Route::post("order",[OrderController::class,'create']);
 
-// Torod Endpoints
+
+
 Route::controller(OrderController::class)->group(function () {
-    Route::post('order/{order_type}', 'store')->name('store');
+    // Torod Endpoints
+    Route::post('order/torod', 'store')->name('store');
     Route::get('order/list', 'orderList')->name('list-order');
     Route::get('order/ship/process', 'orderShipProcess')->name('ship-process');
+
+    //Oneet Endpoints
+    Route::post('order/oneet', 'storeOneet')->name('store-oneet');
+
+
 });
 
 Route::controller(AddressController::class)->group(function () {
