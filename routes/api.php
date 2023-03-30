@@ -33,7 +33,8 @@ Route::controller(OrderController::class)->group(function () {
 
     //Oneet Endpoints
     Route::post('order/oneet', 'storeOneet')->name('store-oneet');
-    Route::get('order/oneet/{id}', 'trackOrderOneet')->name('track-order-oneet');
+    Route::get('order/oneet/get/{id}', 'trackOrderOneet')->name('track-order-oneet');
+    Route::get('order/all', 'getAllOrders')->name('get-all-order-oneet');
 
 
 });

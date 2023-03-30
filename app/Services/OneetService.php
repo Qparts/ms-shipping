@@ -42,4 +42,16 @@ class OneetService
 
         return $response->json();
     }
+
+    public function getAllOrders($request,$token){
+        $response = Http::withHeaders([
+            'Content-Type'=>'application/json',
+            'Authorization'=> $token,
+            'X-Requested-With'=>'XMLHttpRequest'
+        ])->get('https://test.one8-app.com/api/v1/store/orders', [
+            "store_id"=>$request->store_id
+        ]);
+
+        return $response->json();
+    }
 }

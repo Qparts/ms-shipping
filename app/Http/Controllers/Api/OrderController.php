@@ -72,6 +72,10 @@ class OrderController extends Controller
         $token = $request->header('Authorization');
         return $this->oneetService->trackOrder($request,$token,$id);
     }
+    public function getAllOrders(Request $request){
+        $token = $request->header('Authorization');
+        return $this->oneetService->getAllOrders($request,$token);
+    }
 
     //Torod
      public function createTorodOrder(Request $request){
