@@ -40,6 +40,7 @@ Route::controller(OrderController::class)->group(function () {
 });
 
 Route::controller(AddressController::class)->group(function () {
+    // torod address endpoints
     Route::get('address/countries', 'countries')->name('countries');
     Route::get('address/regions/{country_id?}', 'regions')->name('regions');
     Route::get('address/cities/{region_id?}', 'cities')->name('cities');
@@ -48,6 +49,9 @@ Route::controller(AddressController::class)->group(function () {
     Route::post('get-address-details', 'details')->name('details');
     Route::post('address/update/{address_id}', 'updateAddress')->name('update-address');
     Route::post('get-latlong-details', 'getLatLongDetails')->name('latlong-address');
+
+    // Oneet address endpoints
+    Route::get('oneet/addresses', 'listOneetAddresses')->name('list-oneet-Addresses');
 });
 
 Route::controller(CourierController::class)->group(function () {
