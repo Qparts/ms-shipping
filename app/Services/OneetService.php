@@ -66,4 +66,41 @@ class OneetService
 
         return $response->json();
     }
+    public function createOneetAddress($request,$token){
+        $response = Http::withHeaders([
+            'Content-Type'=>'application/json',
+            'Authorization'=> $token,
+            'X-Requested-With'=>'XMLHttpRequest'
+        ])->post(env('Oneet_URL').'/store/addresses', [
+            "store_id"=>$request->store_id,
+            "address_line1"=>$request->address_line1,
+            "latitude"=>$request->latitude,
+            "longitude"=>$request->longitude,
+            "store_close_time"=>$request->store_close_time,
+            "city_id"=>$request->city_id,
+            "district_id"=>$request->district_id,
+        ]);
+
+        return $response->json();
+    }
+
+
+    public function listOneetCities($token){
+        $response = Http::withHeaders([
+            'Content-Type'=>'application/json',
+            'Authorization'=> $token,
+            'X-Requested-With'=>'XMLHttpRequest'
+        ])->get(env('Oneet_URL').'/cities', []);
+
+        return $response->json();
+    }
+    public function listOneetDistricts($token){
+        $response = Http::withHeaders([
+            'Content-Type'=>'application/json',
+            'Authorization'=> $token,
+            'X-Requested-With'=>'XMLHttpRequest'
+        ])->get(env('Oneet_URL').'/districts', []);
+
+        return $response->json();
+    }
 }

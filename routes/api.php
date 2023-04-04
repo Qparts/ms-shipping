@@ -52,6 +52,9 @@ Route::controller(AddressController::class)->group(function () {
 
     // Oneet address endpoints
     Route::get('oneet/addresses', 'listOneetAddresses')->name('list-oneet-Addresses');
+    Route::post('oneet/address/create', 'createOneetAddress')->name('create-oneet-address');
+    Route::get('oneet/cities/list', 'listOneetCities')->name('list-oneet-cities');
+    Route::get('oneet/districts/list', 'listOneetDistricts')->name('list-oneet-districts');
 });
 
 Route::controller(CourierController::class)->group(function () {
