@@ -49,7 +49,7 @@ class TorodService
     }
 
     public function countries(){
-        $url = env('Torod_URL'). '/get-all/countries';
+        $url = config('shipping.Torod_URL'). '/get-all/countries';
         $headers = [
             'Authorization' => request()->bearerToken()
         ];
