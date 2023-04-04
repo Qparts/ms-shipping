@@ -15,7 +15,7 @@ class OneetService
             'Content-Type'=>'application/json',
             'Authorization'=> $token,
             'X-Requested-With'=>'XMLHttpRequest'
-        ])->post(env('Oneet_URL').'/store/orders', [
+        ])->post(config('shipping.Oneet_URL').'/store/orders', [
             'name' => $request->name,
             'mobile_no' => $request->phone_number,
             'invoice_total_price'=>$request->order_total,
@@ -35,7 +35,7 @@ class OneetService
             'Content-Type'=>'application/json',
             'Authorization'=> $token,
             'X-Requested-With'=>'XMLHttpRequest'
-        ])->get(env('Oneet_URL').'/store/orders/'.$id, [
+        ])->get(config('shipping.Oneet_URL').'/store/orders/'.$id, [
             "store_id"=> $request->store_id,
             "order_no"=> $request->order_no
         ]);
@@ -60,7 +60,7 @@ class OneetService
             'Content-Type'=>'application/json',
             'Authorization'=> $token,
             'X-Requested-With'=>'XMLHttpRequest'
-        ])->get(env('Oneet_URL').'/store/addresses', [
+        ])->get(config('shipping.Oneet_URL').'/store/addresses', [
             "store_id"=>$request->store_id
         ]);
 
@@ -71,7 +71,7 @@ class OneetService
             'Content-Type'=>'application/json',
             'Authorization'=> $token,
             'X-Requested-With'=>'XMLHttpRequest'
-        ])->post(env('Oneet_URL').'/store/addresses', [
+        ])->post(config('shipping.Oneet_URL').'/store/addresses', [
             "store_id"=>$request->store_id,
             "address_line1"=>$request->address_line1,
             "latitude"=>$request->latitude,
@@ -90,7 +90,7 @@ class OneetService
             'Content-Type'=>'application/json',
             'Authorization'=> $token,
             'X-Requested-With'=>'XMLHttpRequest'
-        ])->get(env('Oneet_URL').'/cities', []);
+        ])->get(config('shipping.Oneet_URL').'/cities', []);
 
         return $response->json();
     }
@@ -99,7 +99,7 @@ class OneetService
             'Content-Type'=>'application/json',
             'Authorization'=> $token,
             'X-Requested-With'=>'XMLHttpRequest'
-        ])->get(env('Oneet_URL').'/districts', []);
+        ])->get(config('shipping.Oneet_URL').'/districts', []);
 
         return $response->json();
     }
