@@ -66,5 +66,9 @@ class AddressController extends Controller
         $token = $request->header('Authorization');
         return $this->oneetService->listOneetDistricts($token);
     }
+    public function updateOneetAddress(Request $request,$id){
+        $token = $request->header('Authorization');
+        return $this->oneetService->updateOneetAddress($request,$token,$id);
+    }
 
 }
