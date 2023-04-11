@@ -25,4 +25,7 @@ class ShipmentController extends Controller
         return $this->torodService->cancelOrder($request);
 
     }
+    public function getOrderStatus(Request $request){
+
+    }
 }
