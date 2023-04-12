@@ -12,7 +12,7 @@ class OrderService
         $response = Http::withHeaders([
             'Content-Type'=>'application/json',
             'X-Requested-With'=>'XMLHttpRequest'
-        ])->post(config('shipping.Order_URL').'/purchase_orders/update-torod-shipment-status', [
+        ])->post('https://phpdev.fareed9.com/order/api/v1/qvm'.'/purchase_orders/update-torod-shipment-status', [
             "order_id"=>$request->order_id,
             "tracking_id"=>$request->tracking_id,
             "status"=>$request->status,
