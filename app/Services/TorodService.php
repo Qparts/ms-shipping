@@ -336,12 +336,18 @@ class TorodService
         }catch (BadResponseException $e){
             return  $e->getMessage();
         }
-
         $responseJSON = json_decode($response->getBody(), true);
+        foreach($responseJSON['data'] as $res){
+            if($res['title'] == "DRB"){
+                $result = $res;
+                break;
+            }
+        }
         if(!$responseJSON['data'][1]){
             return response()->json(['message' => 'something went wrong!']);
         }
-        return $responseJSON['data'];
+     //   return $responseJSON['data'];
+        return $result;
 
     }
 
