@@ -9,27 +9,116 @@ use Illuminate\Support\Facades\Http;
 class OneetService
 {
 
-    public function storeOrder($request){
-
+    public function storeOrder($request,$token){
 
         $response = Http::withHeaders([
             'Content-Type'=>'application/json',
-            'Authorization'=> 'bearer '. 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiMTkzMjg3MGFmMTU0NWYzNWQ3OWZiYTRmYzYzZWFiNzc5NDUyM2QxZDhjYTlhMWIyNjRkNjc2NWU4NjJkNTg2OGJlNDJkZTk1YWU2Mjk5NDgiLCJpYXQiOjE2NzY4ODk2MDkuMjYyMDk5LCJuYmYiOjE2NzY4ODk2MDkuMjYyMTAyLCJleHAiOjE3MDg0MjU2MDkuMDk1MjUsInN1YiI6IjIzMDk4Iiwic2NvcGVzIjpbXX0.pANmPgAfn0xATzkfoX5ulanA0-mkuGIu2E6ohVGK_5IexpQNVM6GDv39bG76clpeh6yOmxLeY538M_eh3Wcr_LRdMoADzoIXw4xMhXHXZ1o1ANMLlMGXzww9U19PREjCr6N6euZmmYPTgEXan6949MsvOtiAEQey6yzvZ6QLXcxLyIqmA42vQkFEDDyGiGSvio41s1__K_Gkd49osbUSRIPaXp03sxWQXmSGmRHNpqV9fY16LU6n0vfjXZASIeLShP92xEA6eoTKNgMx7TboRPqV1IFu-I9mnMzgwogIVzdYI14kBHrggArMIJdVnVCPSf9p7pNeSUq0zDmNpLGHfplyDR7KO65liz8Cj9EUCGY7NpdKXq52984parHGHJpWCLKdO_09GM2YBTre3vc9tCnrGvfrOwYlijaUEFbY60zbMO2Dp0EWRO7RDcpxk3MCo4JSGqETf9MnnSNGzNCCpPLUynj0MSutCs7dvm8YdlWA1lkt196ISe120SJsBajw3mCJcv_VO_WAxiJZC9MMBsILuAzMvDeksW2vlk6YyO0rWjecfs0Yyz8W8Nt9KXOK6Z55CtIjjhXUjaUTn6lFMAqOTSc0D42syE1dAUO-OQJDCqXirdf9yTLD36Y7S5QyGcaUFcCfjfs7H-KDLuohfgN1FlFJ7jlQusgsDqEtg20',
+            'Authorization'=> $token,
             'X-Requested-With'=>'XMLHttpRequest'
-        ])->post(env('Oneet_URL').'/store/orders', [
+        ])->post(config('shipping.Oneet_URL').'/store/orders', [
             'name' => $request->name,
             'mobile_no' => $request->phone_number,
-            'invoice_ref_no'=>$request->invoice_ref_no,
             'invoice_total_price'=>$request->order_total,
-            'pickup_address_id'=>$request->locate_address,
+            'pickup_address_id'=>$request->pickup_address_id,
             'store_id'=>$request->store_id,
             'vehicle_type_id'=>2,
             'dropoff_time'=>'morning',
             'no_of_pieces'=>$request->no_of_box,
-            'payment_method'=>$request->payment
+            'payment_method'=>$request->payment_method
         ]);
 
         return $response->json();
     }
 
+    public function trackOrder($request,$token,$id){
+        $response = Http::withHeaders([
+            'Content-Type'=>'application/json',
+            'Authorization'=> $token,
+            'X-Requested-With'=>'XMLHttpRequest'
+        ])->get(config('shipping.Oneet_URL').'/store/orders/'.$id, [
+            "store_id"=> $request->store_id,
+            "order_no"=> $request->order_no
+        ]);
+
+        return $response->json();
+    }
+
+    public function getAllOrders($request,$token){
+        $response = Http::withHeaders([
+            'Content-Type'=>'application/json',
+            'Authorization'=> $token,
+            'X-Requested-With'=>'XMLHttpRequest'
+        ])->get('https://test.one8-app.com/api/v1/store/orders', [
+            "store_id"=>$request->store_id
+        ]);
+
+        return $response->json();
+    }
+
+    public function listOneetAddresses($request,$token){
+        $response = Http::withHeaders([
+            'Content-Type'=>'application/json',
+            'Authorization'=> $token,
+            'X-Requested-With'=>'XMLHttpRequest'
+        ])->get(config('shipping.Oneet_URL').'/store/addresses', [
+            "store_id"=>$request->store_id
+        ]);
+
+        return $response->json();
+    }
+    public function createOneetAddress($request,$token){
+        $response = Http::withHeaders([
+            'Content-Type'=>'application/json',
+            'Authorization'=> $token,
+            'X-Requested-With'=>'XMLHttpRequest'
+        ])->post(config('shipping.Oneet_URL').'/store/addresses', [
+            "store_id"=>$request->store_id,
+            "address_line1"=>$request->address_line1,
+            "latitude"=>$request->latitude,
+            "longitude"=>$request->longitude,
+            "store_close_time"=>$request->store_close_time,
+            "city_id"=>$request->city_id,
+            "district_id"=>$request->district_id,
+        ]);
+
+        return $response->json();
+    }
+
+
+    public function listOneetCities($token){
+        $response = Http::withHeaders([
+            'Content-Type'=>'application/json',
+            'Authorization'=> $token,
+            'X-Requested-With'=>'XMLHttpRequest'
+        ])->get(config('shipping.Oneet_URL').'/cities', []);
+
+        return $response->json();
+    }
+    public function listOneetDistricts($token){
+        $response = Http::withHeaders([
+            'Content-Type'=>'application/json',
+            'Authorization'=> $token,
+            'X-Requested-With'=>'XMLHttpRequest'
+        ])->get(config('shipping.Oneet_URL').'/districts', []);
+
+        return $response->json();
+    }
+
+    public function updateOneetAddress($request,$token,$id){
+        $response = Http::withHeaders([
+            'Content-Type'=>'application/json',
+            'Authorization'=> $token,
+            'X-Requested-With'=>'XMLHttpRequest'
+        ])->patch(config('shipping.Oneet_URL').'/store/addresses/'.$id, [
+            "store_id"=>$request->store_id,
+            "address_line1"=>$request->address_line1,
+            "latitude"=>$request->latitude,
+            "longitude"=>$request->longitude,
+            "store_close_time"=>$request->store_close_time,
+            "city_id"=>$request->city_id,
+            "district_id"=>$request->district_id,
+        ]);
+
+        return $response->json();
+    }
 }

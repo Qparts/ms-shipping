@@ -29,10 +29,12 @@ class TorodService
             "no_of_box"=>$request->no_of_box,
             "type"=>$request->type,
             "locate_address"=>$request->locate_address,
-            "weight"=>$request->weight
+            "weight"=>$request->weight,
+            "latitude"=>$request->latitude,
+            "longitude"=>$request->longitude,
         );
 
-        $client = new Client(['base_uri' => env('Torod_URL'),'headers' => $headers] );
+        $client = new Client(['base_uri' => config('shipping.Torod_URL'),'headers' => $headers] );
 
         try {
             $response = $client->request('POST', '/en/api/order/create' ,
@@ -47,7 +49,7 @@ class TorodService
     }
 
     public function countries(){
-        $url = env('Torod_URL'). '/get-all/countries';
+        $url = config('shipping.Torod_URL'). '/get-all/countries';
         $headers = [
             'Authorization' => request()->bearerToken()
         ];
@@ -57,7 +59,7 @@ class TorodService
         }
     public function  regions($country_id = null){
 
-        $url = env('Torod_URL'). '/get-all/regions';
+        $url = config('shipping.Torod_URL'). '/get-all/regions';
         if($country_id){
             $url = $url . "?country_id=".$country_id;
         }
@@ -71,7 +73,7 @@ class TorodService
     }
 
     public function  cities($region_id = null){
-        $url = env('Torod_URL'). '/get-all/cities';
+        $url = config('shipping.Torod_URL'). '/get-all/cities';
         if($region_id){
             $url = $url . "?region_id=".$region_id;
         }
@@ -104,7 +106,7 @@ class TorodService
 
         );
 
-        $client = new Client(['base_uri' => env('Torod_URL'),'headers' => $headers] );
+        $client = new Client(['base_uri' => config('shipping.Torod_URL'),'headers' => $headers] );
         try {
             $response = $client->request('POST', '/en/api/create/address' ,
                 ['form_params' =>  $body ] );
@@ -117,7 +119,7 @@ class TorodService
     }
 
     public function listAddress(){
-        $url = env('Torod_URL'). '/address/list';
+        $url = config('shipping.Torod_URL'). '/address/list';
         $headers = [
             'Authorization' => request()->bearerToken()
         ];
@@ -127,7 +129,7 @@ class TorodService
     }
 
     public function orderList(){
-        $url = env('Torod_URL'). '/order/list';
+        $url = config('shipping.Torod_URL'). '/order/list';
         $headers = [
             'Authorization' => request()->bearerToken()
         ];
@@ -137,7 +139,7 @@ class TorodService
     }
 
     public function getCourierPartners(){
-        $url = env('Torod_URL'). '/get-all/courier/partners';
+        $url = config('shipping.Torod_URL'). '/get-all/courier/partners';
         $headers = [
             'Authorization' => request()->bearerToken()
         ];
@@ -162,7 +164,7 @@ class TorodService
 
         );
 
-        $client = new Client(['base_uri' => env('Torod_URL'),'headers' => $headers] );
+        $client = new Client(['base_uri' => config('shipping.Torod_URL'),'headers' => $headers] );
         try {
             $response = $client->request('POST', '/en/api/courier/partners' ,
                 [      'form_params' =>  $body ] );
@@ -184,7 +186,7 @@ class TorodService
             "address"=>$request->address
         );
 
-        $client = new Client(['base_uri' => env('Torod_URL'),'headers' => $headers] );
+        $client = new Client(['base_uri' => config('shipping.Torod_URL'),'headers' => $headers] );
         try {
             $response = $client->request('POST', '/en/api/get-address-details' ,
                 [      'form_params' =>  $body ] );
@@ -210,9 +212,11 @@ class TorodService
             "email"=>$request->email,
             "zip_code"=>$request->zip_code,
             "type"=>$request->type,
-            "locate_address"=>$request->locate_address
+            "locate_address"=>$request->locate_address,
+            "latitude"=>$request->latitude,
+            "longitude"=>$request->longitude
         );
-        $client = new Client(['base_uri' => env('Torod_URL'),'headers' => $headers] );
+        $client = new Client(['base_uri' => config('shipping.Torod_URL'),'headers' => $headers] );
         try {
             $response = $client->request('POST', '/en/api/update/address/'.$address_id ,
                 [      'form_params' =>  $body ] );
@@ -241,7 +245,7 @@ class TorodService
             "courier_partner_id"=>$request->courier_partner_id
         );
 
-        $client = new Client(['base_uri' => env('Torod_URL'),'headers' => $headers] );
+        $client = new Client(['base_uri' => config('shipping.Torod_URL'),'headers' => $headers] );
         try {
             $response = $client->request('POST', '/en/api/order/ship/process' ,
                 [      'form_params' =>  $body ] );
@@ -253,7 +257,7 @@ class TorodService
         return $responseJSON;
     }
     public function shipmentList(){
-        $url = env('Torod_URL'). '/shipments/list';
+        $url = config('shipping.Torod_URL'). '/shipments/list';
         $headers = [
             'Authorization' => request()->bearerToken()
         ];
@@ -272,7 +276,7 @@ class TorodService
             "tracking_id"=>$request->tracking_id
         );
 
-        $client = new Client(['base_uri' => env('Torod_URL'),'headers' => $headers] );
+        $client = new Client(['base_uri' => config('shipping.Torod_URL'),'headers' => $headers] );
         try {
             $response = $client->request('POST', '/en/api/order/track' ,
                 [      'form_params' =>  $body ] );
@@ -295,7 +299,7 @@ class TorodService
             "tracking_id"=>$request->tracking_id
         );
 
-        $client = new Client(['base_uri' => env('Torod_URL'),'headers' => $headers] );
+        $client = new Client(['base_uri' => config('shipping.Torod_URL'),'headers' => $headers] );
         try {
             $response = $client->request('POST', '/en/api/order/track' ,
                 [      'form_params' =>  $body ] );
@@ -325,19 +329,25 @@ class TorodService
             "filter_by"=>"fastest"
             //is_insurance:1
         );
-        $client = new Client(['base_uri' => env('Torod_URL'),'headers' => $headers] );
+        $client = new Client(['base_uri' => config('shipping.Torod_URL'),'headers' => $headers] );
         try {
             $response = $client->request('POST', '/en/api/courier/partners/list',
                 [      'form_params' =>  $body ] );
         }catch (BadResponseException $e){
             return  $e->getMessage();
         }
-
         $responseJSON = json_decode($response->getBody(), true);
-        if(!$responseJSON['data'][0]){
+        foreach($responseJSON['data'] as $res){
+            if($res['title'] == "DRB"){
+                $result = $res;
+                break;
+            }
+        }
+        if(!$responseJSON['data'][1]){
             return response()->json(['message' => 'something went wrong!']);
         }
-        return $responseJSON['data'][0];
+     //   return $responseJSON['data'];
+        return $result;
 
     }
 
@@ -353,7 +363,7 @@ class TorodService
             "longitude"=>$request->longitude
         );
 
-        $client = new Client(['base_uri' => env('Torod_URL'),'headers' => $headers] );
+        $client = new Client(['base_uri' => config('shipping.Torod_URL'),'headers' => $headers] );
         try {
             $response = $client->request('POST', '/en/api/get-latlong-details' ,
                 [      'form_params' =>  $body ] );

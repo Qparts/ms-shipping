@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\OneetService;
 use App\Services\TorodService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
@@ -11,9 +12,11 @@ class AddressController extends Controller
 {
     use ApiResponse;
     public $torodService;
-    public function __construct(TorodService $torodService)
+    public $oneetService;
+    public function __construct(TorodService $torodService,OneetService $oneetService)
     {
         $this->torodService = $torodService;
+        $this->oneetService = $oneetService;
     }
 
     public function countries(){
@@ -45,6 +48,27 @@ class AddressController extends Controller
     }
     public function getLatLongDetails(Request $request){
         return $this->torodService->getLatLongDetails($request);
+    }
+
+    public function listOneetAddresses(Request $request){
+        $token = $request->header('Authorization');
+        return $this->oneetService->listOneetAddresses($request,$token);
+    }
+    public function createOneetAddress(Request $request){
+        $token = $request->header('Authorization');
+        return $this->oneetService->createOneetAddress($request,$token);
+    }
+    public function listOneetCities(Request $request){
+        $token = $request->header('Authorization');
+        return $this->oneetService->listOneetCities($token);
+    }
+    public function listOneetDistricts(Request $request){
+        $token = $request->header('Authorization');
+        return $this->oneetService->listOneetDistricts($token);
+    }
+    public function updateOneetAddress(Request $request,$id){
+        $token = $request->header('Authorization');
+        return $this->oneetService->updateOneetAddress($request,$token,$id);
     }
 
 }
